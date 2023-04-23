@@ -1,0 +1,71 @@
+<div>
+  <h1>List</h1>
+  <div>
+    <app-list [elements]="listElements">
+      <ng-template appListElement [id]="5" let-dataItem="dataItem">
+        <strong style="color: green"
+          >My personal container {{ dataItem.title }}</strong
+        >
+      </ng-template>
+
+      <ng-template appListElement [id]="8" let-dataItem="dataItem">
+        <strong style="color: red"
+          >My personal container 2 {{ dataItem.title }}</strong
+        >
+      </ng-template>
+    </app-list>
+  </div>
+</div>
+
+<div>
+  <h1>Table</h1>
+  <div>
+    <app-table
+      [data]="listElements"
+      [displayColumns]="['id', 'title', 'description', 'number']"
+      (dragged)="dragHandler($event)"
+    >
+      <!-- ----------- -->
+      <!-- ----ID----- -->
+      <!-- ----------- -->
+      <ng-template
+        appTableCell
+        column="id"
+        let-rowIndex="rowIndex"
+        let-value="value"
+        let-element="element"
+      >
+        <i>{{ value }}</i>
+      </ng-template>
+
+      <!-- ----------- -->
+      <!-- DESCRIPTION -->
+      <!-- ----------- -->
+      <ng-template appTableHeaderCell column="description" let-column="column">
+        <strong>
+          <i>{{ column }}</i>
+        </strong>
+      </ng-template>
+      <ng-template
+        appTableCell
+        column="description"
+        [useDefaultContainer]="false"
+        let-rowIndex="rowIndex"
+        let-value="value"
+        let-element="element"
+      >
+        <div class="cell-inner-container" (click)="clickHandler()">
+          <div>
+            <strong>
+              {{ value }} -
+              <span style="color: red">{{ element.id }}</span>
+            </strong>
+          </div>
+          <div>
+            <button (click)="increase(element.id)">+</button>
+          </div>
+        </div>
+      </ng-template>
+    </app-table>
+  </div>
+</div>

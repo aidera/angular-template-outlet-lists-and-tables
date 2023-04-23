@@ -1,0 +1,17 @@
+<ul>
+  <ol class="element" *ngFor="let displayElement of displayData">
+    <span>{{ displayElement.element.id }}</span>
+    <strong>{{ displayElement.element.title }}</strong>
+    <p>{{ displayElement.element.description }}</p>
+
+    <div *ngIf="displayElement.template">
+      <ng-container
+        *ngTemplateOutlet="
+          displayElement.template!.templateRef;
+          context: { dataItem: displayElement.element }
+        "
+      >
+      </ng-container>
+    </div>
+  </ol>
+</ul>

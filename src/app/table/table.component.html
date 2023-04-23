@@ -1,0 +1,89 @@
+<table class="table">
+  <!-- ------ -->
+  <!-- HEADER -->
+  <!-- ------ -->
+  <thead>
+    <tr class="header-row">
+      <th class="header-cell actions-header-cell"></th>
+      <th class="header-cell" *ngFor="let displayDataElement of displayData">
+        <ng-container
+          *ngIf="
+            displayDataElement.headerCellTemplate;
+            then customHeaderCell;
+            else defaultHeaderCell
+          "
+        >
+        </ng-container>
+
+        <ng-template #customHeaderCell
+          ><ng-container
+            *ngTemplateOutlet="
+              displayDataElement.headerCellTemplate!.templateRef;
+              context: { column: displayDataElement.column }
+            "
+          >
+          </ng-container
+        ></ng-template>
+
+        <ng-template #defaultHeaderCell>{{
+          displayDataElement.column
+        }}</ng-template>
+      </th>
+    </tr>
+  </thead>
+
+  <!-- ---- -->
+  <!-- BODY -->
+  <!-- ---- -->
+  <tbody class="tbody" cdkDropList (cdkDropListDropped)="onDrop($event)">
+    <tr
+      class="row"
+      *ngFor="let dataElement of data; let i = index"
+      cdkDrag
+      cdkDragLockAxis="y"
+      cdkDragBoundary=".tbody"
+    >
+      <td class="cell actions-cell">
+        <div class="cell-inner-container drag-handler" cdkDragHandle>|||</div>
+      </td>
+
+      <td class="cell" *ngFor="let displayDataElement of displayData">
+        <div
+          [ngClass]="{
+            'cell-inner-container': !displayDataElement.cellTemplate
+              ? true
+              : displayDataElement.cellTemplate.useDefaultContainer
+          }"
+        >
+          <ng-container
+            *ngIf="
+              displayDataElement.cellTemplate;
+              then customCell;
+              else defaultCell
+            "
+          >
+          </ng-container>
+
+          <ng-template #customCell
+            ><ng-container
+              *ngTemplateOutlet="
+                displayDataElement.cellTemplate!.templateRef;
+                context: {
+                  column: displayDataElement.column,
+                  rowIndex: i,
+                  value: dataElement[displayDataElement.column],
+                  element: dataElement
+                }
+              "
+            >
+            </ng-container
+          ></ng-template>
+
+          <ng-template #defaultCell>{{
+            dataElement[displayDataElement.column]
+          }}</ng-template>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
